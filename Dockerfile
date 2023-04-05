@@ -14,10 +14,9 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
 # copy source code
 COPY . /app
 
-# test the app
+# Install models 
 RUN echo "སློབ་དཔོན་བྲམ་ཟེ་རྟ་དབྱངསཀྱིཡོམཛད།" > test-bo.txt
 RUN echo "Hello World" > test-en.txt
-
 RUN chmod +x align_tib_en.sh
-# RUN /app/align_tib_en.sh test-bo.txt test-en.txt
-# RUN cat test-bo.txt.org
+RUN /app/align_tib_en.sh test-bo.txt test-en.txt
+RUN cat test-bo.txt.org
