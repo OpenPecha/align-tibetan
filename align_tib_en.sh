@@ -10,7 +10,7 @@ search_buffer_size=50
 
 cp $1 $1.work
 cp $2 $2.work
-output_dir=${3:-"./"}
+output_dir=${3:-"output"}
 mkdir $output_dir
 
 # this is a lot of preprocessing steps to check new-line behaviour etc. Ideally, there should be one "sentence" per line, and the number of sentences between Tibetan and English should match up as closely as possible before we apply the aligner. 
@@ -62,12 +62,14 @@ rm $1.org
 rm $1.train
 python ladder2org.py $1.work $2.work ladder >> $1.org
 python create_train.py $1.work $2.work ladder >> $1.train
-python create_train_clean.py $1.work $2.work ladder >> $output_dir/$1.train_cleaned
+python create_train_clean.py $1.work $2.work ladder >> $1.train_cleaned
 
 # clean up
+mv *.txt* $output_dir/
 rm $1.work
 rm $2.work
 rm $2.work2 
 rm $1.work_vectors.npy
 rm $2.work_vectors.npy
-rm *.txt*
+
+echo "[OUTPUT] $output_dir/$1.train_cleaned"
