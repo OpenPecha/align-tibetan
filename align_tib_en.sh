@@ -66,10 +66,10 @@ python create_train_clean.py $1.work $2.work ladder >> $1.train_cleaned
 
 # clean up
 mv *.txt* $output_dir/
-rm $1.work
-rm $2.work
-rm $2.work2 
-rm $1.work_vectors.npy
-rm $2.work_vectors.npy
+rm $output/$1.work
+rm $output/$2.work
+rm $output/$2.work2 
+rm $output/$1.work_vectors.npy
+rm $output/$2.work_vectors.npy
 
 echo "[OUTPUT] $output_dir/$1.train_cleaned"
