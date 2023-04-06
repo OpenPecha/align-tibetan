@@ -1,11 +1,17 @@
 #!/bin/bash
 number_of_overlays=6 # the higher the number of overlays, the more precise alignment is going to be, but also slower
 deletion=0.06 # higher = less precise
-search_buffer_size=50 
-# first parameter is a file in Tibetan unicode, second parameter is a file with English in plain text. 
+search_buffer_size=50
+
+# Args:
+# first parameter is a file in Tibetan unicode
+# second parameter is a file with English in plain text.
+# third parameter is output path
 
 cp $1 $1.work
 cp $2 $2.work
+output_dir=${3:-"./"}
+mkdir $output_dir
 
 # this is a lot of preprocessing steps to check new-line behaviour etc. Ideally, there should be one "sentence" per line, and the number of sentences between Tibetan and English should match up as closely as possible before we apply the aligner. 
 perl -C -p -i -e 's/\n//g;' $1.work
@@ -56,19 +62,12 @@ rm $1.org
 rm $1.train
 python ladder2org.py $1.work $2.work ladder >> $1.org
 python create_train.py $1.work $2.work ladder >> $1.train
-python create_train_clean.py $1.work $2.work ladder >> $1.train_cleaned
+python create_train_clean.py $1.work $2.work ladder >> $output_dir/$1.train_cleaned
 
-cp $1.train $1.train_wylie
-python convert_to_wylie.py $1.train_wylie
-
-cp $1.train_cleaned $1.train_cleaned_wylie
-python convert_to_wylie.py $1.train_cleaned_wylie
-
-
-#python create_train.py $1.work $2.work2 ladder >> $1.train
+# clean up
 rm $1.work
 rm $2.work
 rm $2.work2 
 rm $1.work_vectors.npy
 rm $2.work_vectors.npy
-
+rm *.txt*
