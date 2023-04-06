@@ -27,7 +27,8 @@ RUN echo "སློབ་དཔོན་བྲམ་ཟེ་རྟ་དབྱ�
 RUN echo "Hello World" > test-en.txt
 RUN chmod +x align_tib_en.sh
 RUN /app/align_tib_en.sh test-bo.txt test-en.txt
-RUN cat test-bo.txt.org
+RUN cat ./output/test-bo.txt.train_cleaned
 
-# remove models
+# clean up
 RUN rm -rf /root/.cache/
+RUN rm -rf output/
