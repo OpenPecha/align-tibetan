@@ -54,18 +54,21 @@ sed -i '/^$/d' $2.work
 
 python get_vectors.py $1.work $number_of_overlays
 python get_vectors.py $2.work $number_of_overlays
-rm ladder
+
 ./vecalign.py -a $number_of_overlays -d $deletion --search_buffer_size $search_buffer_size --alignment_max_size $number_of_overlays --src $1.work --tgt $2.work \
    --src_embed $1.work_overlay $1.work_vectors.npy  \
    --tgt_embed $2.work_overlay $2.work_vectors.npy >> ladder
-rm $1.org
-rm $1.train
+
 python ladder2org.py $1.work $2.work ladder >> $1.org
 python create_train.py $1.work $2.work ladder >> $1.train
 python create_train_clean.py $1.work $2.work ladder >> $1.train_cleaned
 
 # clean up
 mv *.txt* $output_dir/
+mv $output/requirements.txt ./
+rm $output/ladder
+rm $output/$1.org
+rm $output/$1.train
 rm $output/$1.work
 rm $output/$2.work
 rm $output/$2.work2 
