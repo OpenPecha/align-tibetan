@@ -51,12 +51,13 @@ sed -i "s/{[^{}]*}//g" $1.work
 sed -i '/^$/d' $1.work
 sed -i '/^$/d' $2.work
 
-
-python get_vectors.py $1.work $number_of_overlays
-python get_vectors.py $2.work $number_of_overlays
+echo '[INFO] Getting Embedding...'
+time python get_vectors.py $1.work $number_of_overlays
+time python get_vectors.py $2.work $number_of_overlays
 
 rm ladder
-./vecalign.py -a $number_of_overlays -d $deletion --search_buffer_size $search_buffer_size --alignment_max_size $number_of_overlays --src $1.work --tgt $2.work \
+echo '[INFO] Running alignment...'
+time ./vecalign.py -a $number_of_overlays -d $deletion --search_buffer_size $search_buffer_size --alignment_max_size $number_of_overlays --src $1.work --tgt $2.work \
    --src_embed $1.work_overlay $1.work_vectors.npy  \
    --tgt_embed $2.work_overlay $2.work_vectors.npy >> ladder
 
