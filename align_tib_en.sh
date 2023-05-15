@@ -13,47 +13,7 @@ cp $2 $2.work
 output_dir=${3:-"output"}
 mkdir $output_dir
 
-# this is a lot of preprocessing steps to check new-line behaviour etc. Ideally, there should be one "sentence" per line, and the number of sentences between Tibetan and English should match up as closely as possible before we apply the aligner. 
-perl -p -CIO -i -e 's/། །/།_།/g;' $1.work
-perl -C -p -i -e 's/\n//g;' $1.work
-perl -C -p -i -e 's/\r//g;' $1.work
-perl -p -CIO -i -e 's/དང་། /དང་།_/g;' $1.work
-
-perl -p -CIO -i -e 's/།([^_])/།\n$1/g;' $1.work
-perl -p -CIO -i -e 's/དང་།_/དང་། /g;' $1.work
-perl -p -CIO -i -e 's/^ +//g;' $1.work
-perl -p -CIO -i -e 's/[0-9a-zA-Z]+//g;'  $1.work
-sed -i -e 's/_/ /g'  $1.work
-sed -i "s/[0-9]://g;" $1.work
-
-
-perl -p -CIO -i -e 's/ [1-9]+[a-z.-]+\.//g;' $2.work
-perl -p -CIO -i -e 's/vs\./vs /g;' $2.work
-perl -p -CIO -i -e 's/ +/ /g;' $2.work
-perl -p -CIO -i -e 's/([.!?:；;!?:] )/$1\n/g;' $2.work
-sed -i '/^.\{,7\}$/d' $2.work
-
 cp $2.work $2.work2
-
-sed -i -e 's/([^()]*)//g' $2.work
-sed -i -e 's/\[[^][]*\]//g'  $2.work
-sed -i -e 's/{[^}{]*}//g'  $2.work
-
-#sed -i -e 's/{[^}{]*}//g'  $1.work
-sed -i "s/{[^{}]*}//g" $2.work
-sed -i "s/{[^{}]*}//g" $2.work
-sed -i "s/{[^{}]*}//g" $2.work
-sed -i "s/{[^{}]*}//g" $2.work
-sed -i "s/{[^{}]*}//g" $2.work
-
-#sed -i "s/{[^{}]*}//g" $1.work
-#sed -i "s/{[^{}]*}//g" $1.work
-#sed -i "s/{[^{}]*}//g" $1.work
-#sed -i "s/{[^{}]*}//g" $1.work
-#sed -i "s/{[^{}]*}//g" $1.work
-
-sed -i '/^$/d' $1.work
-sed -i '/^$/d' $2.work
 
 echo '[INFO] Getting Embedding...'
 time python get_vectors.py $1.work $number_of_overlays
@@ -76,7 +36,7 @@ mv *.txt* $output_dir/
 mv $output_dir/requirements.txt ./
 rm $output_dir/$1.work
 rm $output_dir/$2.work
-rm $output_dir/$2.work2 
+rm $output_dir/$2.work2
 rm $output_dir/$1.work_vectors.npy
 rm $output_dir/$2.work_vectors.npy
 
